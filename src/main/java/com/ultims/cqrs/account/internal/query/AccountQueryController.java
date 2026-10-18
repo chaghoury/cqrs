@@ -1,7 +1,9 @@
 package com.ultims.cqrs.account.internal.query;
 
 import java.util.List;
+import java.util.Objects;
 
+import org.axonframework.messaging.responsetypes.ResponseType;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +39,10 @@ public class AccountQueryController implements AccountApi {
 
     @Override
     public ResponseEntity<List<AccountResponse>> listAccounts() {
-        List<AccountView> views = queryGateway.query(
-                new FindAllAccountsQuery(),
-                ResponseTypes.multipleInstancesOf(AccountView.class)).join();
+        ResponseType<List<AccountView>> responseType = ResponseTypes.multipleInstancesOf(AccountView.class);
+        Objects.requireNonNull(responseType, "Response type must not be null");
+
+        List<AccountView> views = queryGateway.query(new FindAllAccountsQuery(), responseType).join();
 
         List<AccountResponse> responseList = views != null
                 ? views.stream().map(this::toResponse).toList()
