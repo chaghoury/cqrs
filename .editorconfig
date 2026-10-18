@@ -1,0 +1,33 @@
+# Shared editor settings for the repository. EditorConfig-aware IDEs apply
+# these rules automatically; language-specific formatters may still be needed.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{java,kt}]
+indent_size = 4
+
+[*.{yaml,yml}]
+indent_size = 2
+
+[*.json]
+indent_size = 2
+
+[*.{xml,html,htm}]
+indent_size = 2
+
+[*.md]
+indent_size = 2
+trim_trailing_whitespace = false
+
+[*.{sh,bash}]
+indent_size = 4
+
+[*.{cmd,bat}]
+end_of_line = crlf
