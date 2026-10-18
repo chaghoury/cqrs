@@ -1,0 +1,264 @@
+openapi: 3.0.3
+info:
+  title: CQRS Axon Banking Service API
+  description: OpenAPI Specification serving as the single source of truth for the CQRS Axon application.
+  version: 1.0.0
+servers:
+  - url: /
+    description: Current server environment
+tags:
+  - name: Account
+    description: CQRS Account Operations
+  - name: Hello
+    description: Hello endpoints
+paths:
+  /api/accounts:
+    post:
+      tags:
+        - Account
+      summary: Create a new account (Command)
+      description: Dispatches a CreateAccountCommand to the command bus.
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAccountRequest"
+      responses:
+        "201":
+          description: Account successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountResponse"
+        "400":
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      tags:
+        - Account
+      summary: List all accounts (Query)
+      description: Dispatches a FindAllAccountsQuery to the query bus.
+      operationId: listAccounts
+      responses:
+        "200":
+          description: List of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AccountResponse"
+
+  /api/accounts/{accountId}:
+    get:
+      tags:
+        - Account
+      summary: Get account by ID (Query)
+      description: Dispatches a FindAccountByIdQuery to the query bus.
+      operationId: getAccount
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique account ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Account details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountResponse"
+        "404":
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/accounts/{accountId}/deposit:
+    post:
+      tags:
+        - Account
+      summary: Deposit money into account (Command)
+      description: Dispatches a DepositMoneyCommand to the command bus.
+      operationId: depositMoney
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique account ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepositRequest"
+      responses:
+        "200":
+          description: Deposit successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountResponse"
+        "400":
+          description: Invalid deposit amount or account not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/accounts/{accountId}/withdraw:
+    post:
+      tags:
+        - Account
+      summary: Withdraw money from account (Command)
+      description: Dispatches a WithdrawMoneyCommand to the command bus.
+      operationId: withdrawMoney
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The unique account ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawRequest"
+      responses:
+        "200":
+          description: Withdrawal successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountResponse"
+        "400":
+          description: Insufficient funds or invalid withdrawal amount
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/hello:
+    get:
+      tags:
+        - Hello
+      summary: Greet the user
+      description: Returns a greeting message for the specified name.
+      operationId: sayHello
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: Name of the person to greet
+          schema:
+            type: string
+            default: World
+      responses:
+        "200":
+          description: Greeting successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GreetingResponse"
+
+components:
+  schemas:
+    CreateAccountRequest:
+      type: object
+      required:
+        - customerName
+        - initialBalance
+      properties:
+        customerName:
+          type: string
+          example: "Alice Johnson"
+        initialBalance:
+          type: number
+          format: double
+          minimum: 0
+          example: 500.00
+
+    DepositRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+          example: 150.00
+
+    WithdrawRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+          example: 50.00
+
+    AccountResponse:
+      type: object
+      required:
+        - accountId
+        - customerName
+        - balance
+        - status
+      properties:
+        accountId:
+          type: string
+          example: "acc-12345"
+        customerName:
+          type: string
+          example: "Alice Johnson"
+        balance:
+          type: number
+          format: double
+          example: 650.00
+        status:
+          type: string
+          example: "ACTIVE"
+        lastUpdated:
+          type: string
+          format: date-time
+
+    GreetingResponse:
+      type: object
+      required:
+        - message
+        - timestamp
+      properties:
+        message:
+          type: string
+          example: "Hello, World!"
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          example: "INVALID_ARGUMENT"
+        message:
+          type: string
+          example: "The provided argument is invalid"

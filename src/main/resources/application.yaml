@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: cqrs
+
+springdoc:
+  api-docs:
+    enabled: true
+  packages-to-scan: none
+  swagger-ui:
+    url: /openapi.yaml
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+
+axon:
+  axonserver:
+    enabled: false
+  serializer:
+    general: jackson
+    events: jackson
+    messages: jackson
