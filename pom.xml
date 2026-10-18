@@ -181,6 +181,7 @@
 								<openApiNullable>false</openApiNullable>
 								<skipDefaultInterface>false</skipDefaultInterface>
 								<dateLibrary>java8</dateLibrary>
+								<generateBuilders>true</generateBuilders>
 							</configOptions>
 						</configuration>
 					</execution>
