@@ -36,14 +36,16 @@ public class AccountCommandController implements AccountApi {
                 accountId,
                 createAccountRequest.getCustomerName(),
                 initialBalance);
+
         commandGateway.sendAndWait(command);
 
-        AccountResponse response = new AccountResponse();
-        response.setAccountId(accountId);
-        response.setCustomerName(command.customerName());
-        response.setBalance(command.initialBalance().doubleValue());
-        response.setStatus("ACTIVE");
-        response.setLastUpdated(OffsetDateTime.now());
+        AccountResponse response = AccountResponse.builder()
+                .accountId(accountId)
+                .customerName(command.customerName())
+                .balance(command.initialBalance().doubleValue())
+                .status("ACTIVE")
+                .lastUpdated(OffsetDateTime.now())
+                .build();
 
         return ResponseEntity.created(URI.create("/api/accounts/" + accountId)).body(response);
     }
@@ -55,10 +57,11 @@ public class AccountCommandController implements AccountApi {
                 BigDecimal.valueOf(depositRequest.getAmount()));
         commandGateway.sendAndWait(command);
 
-        AccountResponse response = new AccountResponse();
-        response.setAccountId(accountId);
-        response.setStatus("ACTIVE");
-        response.setLastUpdated(OffsetDateTime.now());
+        AccountResponse response = AccountResponse.builder()
+                .accountId(accountId)
+                .status("ACTIVE")
+                .lastUpdated(OffsetDateTime.now())
+                .build();
 
         return ResponseEntity.ok(response);
     }
@@ -70,10 +73,11 @@ public class AccountCommandController implements AccountApi {
                 BigDecimal.valueOf(withdrawRequest.getAmount()));
         commandGateway.sendAndWait(command);
 
-        AccountResponse response = new AccountResponse();
-        response.setAccountId(accountId);
-        response.setStatus("ACTIVE");
-        response.setLastUpdated(OffsetDateTime.now());
+        AccountResponse response = AccountResponse.builder()
+                .accountId(accountId)
+                .status("ACTIVE")
+                .lastUpdated(OffsetDateTime.now())
+                .build();
 
         return ResponseEntity.ok(response);
     }
