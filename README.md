@@ -279,12 +279,12 @@ response models also expose builder methods. For example:
 
 ```java
 AccountResponse response = AccountResponse.builder()
-        .accountId(accountId)
-        .customerName(customerName)
-        .balance(balance)
-        .status("ACTIVE")
-        .lastUpdated(OffsetDateTime.now())
-        .build();
+  .accountId(accountId)
+  .customerName(customerName)
+  .balance(balance)
+  .status("ACTIVE")
+  .lastUpdated(OffsetDateTime.now())
+  .build();
 ```
 
 Keep changes to the wire contract deliberate: changing a field name, type,
