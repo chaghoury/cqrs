@@ -1,7 +1,7 @@
 package com.ultims.cqrs.account;
 
-import org.axonframework.modelling.command.TargetAggregateIdentifier;
 import java.math.BigDecimal;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 public record CreateAccountCommand(
     @TargetAggregateIdentifier String accountId,

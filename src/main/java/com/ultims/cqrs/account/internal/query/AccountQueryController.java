@@ -1,19 +1,17 @@
 package com.ultims.cqrs.account.internal.query;
 
-import java.util.List;
-import java.util.Objects;
-
-import org.axonframework.messaging.responsetypes.ResponseType;
-import org.axonframework.messaging.responsetypes.ResponseTypes;
-import org.axonframework.queryhandling.QueryGateway;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.ultims.cqrs.account.AccountView;
 import com.ultims.cqrs.account.FindAccountByIdQuery;
 import com.ultims.cqrs.account.FindAllAccountsQuery;
 import com.ultims.cqrs.api.AccountApi;
 import com.ultims.cqrs.dto.AccountResponse;
+import java.util.List;
+import java.util.Objects;
+import org.axonframework.messaging.responsetypes.ResponseType;
+import org.axonframework.messaging.responsetypes.ResponseTypes;
+import org.axonframework.queryhandling.QueryGateway;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AccountQueryController implements AccountApi {
@@ -26,9 +24,9 @@ public class AccountQueryController implements AccountApi {
 
     @Override
     public ResponseEntity<AccountResponse> getAccount(String accountId) {
-        AccountView view = queryGateway.query(
-                new FindAccountByIdQuery(accountId),
-                AccountView.class).join();
+        AccountView view = queryGateway
+            .query(new FindAccountByIdQuery(accountId), AccountView.class)
+            .join();
 
         if (view == null) {
             return ResponseEntity.notFound().build();
@@ -39,14 +37,17 @@ public class AccountQueryController implements AccountApi {
 
     @Override
     public ResponseEntity<List<AccountResponse>> listAccounts() {
-        ResponseType<List<AccountView>> responseType = ResponseTypes.multipleInstancesOf(AccountView.class);
+        ResponseType<List<AccountView>> responseType =
+            ResponseTypes.multipleInstancesOf(AccountView.class);
         Objects.requireNonNull(responseType, "Response type must not be null");
 
-        List<AccountView> views = queryGateway.query(new FindAllAccountsQuery(), responseType).join();
+        List<AccountView> views = queryGateway
+            .query(new FindAllAccountsQuery(), responseType)
+            .join();
 
         List<AccountResponse> responseList = views != null
-                ? views.stream().map(this::toResponse).toList()
-                : List.of();
+            ? views.stream().map(this::toResponse).toList()
+            : List.of();
 
         return ResponseEntity.ok(responseList);
     }
@@ -55,7 +56,9 @@ public class AccountQueryController implements AccountApi {
         AccountResponse response = new AccountResponse();
         response.setAccountId(view.accountId());
         response.setCustomerName(view.customerName());
-        response.setBalance(view.balance() != null ? view.balance().doubleValue() : 0.0);
+        response.setBalance(
+            view.balance() != null ? view.balance().doubleValue() : 0.0
+        );
         response.setStatus(view.status());
         response.setLastUpdated(view.lastUpdated());
         return response;

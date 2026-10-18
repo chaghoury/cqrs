@@ -10,7 +10,11 @@ import org.springframework.context.annotation.Configuration;
 public class AxonConfig {
 
     @Bean
-    @ConditionalOnProperty(name = "axon.axonserver.enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(
+        name = "axon.axonserver.enabled",
+        havingValue = "false",
+        matchIfMissing = true
+    )
     public EventStorageEngine eventStorageEngine() {
         return new InMemoryEventStorageEngine();
     }

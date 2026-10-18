@@ -1,7 +1,6 @@
 package com.ultims.cqrs.config;
 
 import java.lang.reflect.Method;
-
 import org.springframework.boot.webmvc.autoconfigure.WebMvcRegistrations;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -22,7 +21,10 @@ public class WebMvcRegistrationsConfig implements WebMvcRegistrations {
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
         return new RequestMappingHandlerMapping() {
             @Override
-            protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
+            protected RequestMappingInfo getMappingForMethod(
+                Method method,
+                Class<?> handlerType
+            ) {
                 if (method.getDeclaringClass().isInterface()) {
                     return null;
                 }

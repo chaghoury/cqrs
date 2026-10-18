@@ -15,10 +15,15 @@ public class OpenApiController {
     @Value("classpath:static/openapi.yaml")
     private Resource openApiYaml;
 
-    @GetMapping(value = "/openapi.yaml", produces = {"application/yaml", "text/yaml", MediaType.TEXT_PLAIN_VALUE})
+    @GetMapping(
+        value = "/openapi.yaml",
+        produces = {
+            "application/yaml", "text/yaml", MediaType.TEXT_PLAIN_VALUE,
+        }
+    )
     public ResponseEntity<Resource> getOpenApiYaml() {
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("application/yaml"))
-                .body(openApiYaml);
+            .contentType(MediaType.parseMediaType("application/yaml"))
+            .body(openApiYaml);
     }
 }

@@ -7,12 +7,11 @@ import org.springframework.modulith.core.ApplicationModules;
 @SpringBootTest
 class CqrsApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {}
 
-	@Test
-	void verifiesModularStructure() {
-		ApplicationModules.of(CqrsApplication.class).verify();
-	}
+    @Test
+    void verifiesModularStructure() {
+        ApplicationModules.of(CqrsApplication.class).verify();
+    }
 }
